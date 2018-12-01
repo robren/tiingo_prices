@@ -28,7 +28,28 @@ A CLI tool to get close of day prices from tiingo
 Features
 --------
 
-* TODO
+* Uses the tiingo python API to obtain most recent closing prices for a number
+  of tickers. The tickers being specified in a text file, one ticker per line.
+* Last years dividends are also obtained anc calculated for each ticker.
+* Output is either written to stdout or to a specified file. Output is written in csv
+  format with Ticker,Price,Dividend
+
+Usage
+-----
+
+usage: tiingo_prices [-h] [--ticker_file TICKER_FILE]
+                     [--output_file OUTPUT_FILE] [--version]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --ticker_file TICKER_FILE
+                        What is the ticker file name, default tickers.txt
+  --output_file OUTPUT_FILE
+                        What is the output file name, default writes to stdout
+  --version             show program's version number and exit
+
+
+
 
 Credits
 ---------
