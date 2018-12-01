@@ -22,7 +22,6 @@ A CLI tool to get close of day prices from tiingo
 
 
 * Free software: MIT license
-* Documentation: https://tiingo-prices.readthedocs.io.
 
 
 Features
@@ -33,6 +32,20 @@ Features
 * Last years dividends are also obtained anc calculated for each ticker.
 * Output is either written to stdout or to a specified file. Output is written in csv
   format with Ticker,Price,Dividend
+
+Installation
+------------
+
+This is not commited to pypi so the best way of installing is to:
+
+- Git clone the repo
+- Optional:  Create a virtual environment if desired.
+- Install locally with 
+  
+.. code:: bash
+
+   pip install --user -e .
+
 
 Usage
 -----
