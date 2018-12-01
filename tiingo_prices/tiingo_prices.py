@@ -8,6 +8,7 @@ import sys
 from tiingo import TiingoClient
 
 tiingo_key = os.environ['TIINGO_API_KEY']
+version = '0.1.0' 
 
 
 def main():
@@ -16,8 +17,14 @@ def main():
             help='What is the ticker file name, default tickers.txt')
     parser.add_argument('--output_file', type=str,\
             help='What is the output file name, default writes to stdout')
+    parser.add_argument('--version', action='version', version='0.1.0')
     args = parser.parse_args()
     out_file = args.output_file
+    version = args.version
+
+    if version:
+        print("tiingo_prices version is {}".format(version))
+
 
     if out_file:
         if os.path.isfile(out_file):

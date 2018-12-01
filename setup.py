@@ -10,8 +10,8 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    tiingo,
-    pandas
+    'tiingo',
+    'pandas'
 ]
 
 test_requirements = [
@@ -31,6 +31,11 @@ setup(
     ],
     package_dir={'tiingo_prices':
                  'tiingo_prices'},
+    entry_points={
+        'console_scripts': [
+            'tiingo_prices=tiingo_prices.tiingo_prices:main'
+        ]
+    },
     include_package_data=True,
     install_requires=requirements,
     license="MIT license",
