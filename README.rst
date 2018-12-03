@@ -50,17 +50,23 @@ This is not commited to pypi so the best way of installing is to:
 Usage
 -----
 
-usage: tiingo_prices [-h] [--ticker_file TICKER_FILE]
-                     [--output_file OUTPUT_FILE] [--version]
+Set the environment variable TIINGO_API_KEY to the API key associated with your
+tiingo account.  For these close of day prices and divdends the API key
+provided with the free "starter" account will work. 
+
+$ tiingo_prices -h
+usage: tiingo_prices [-h] [--output_file OUTPUT_FILE] [--version] ticker_file
+
+Returns the most recent closing prices and last years dividends for stocks
+
+positional arguments:
+  ticker_file           Ticker file name: One ticker per line
 
 optional arguments:
   -h, --help            show this help message and exit
-  --ticker_file TICKER_FILE
-                        What is the ticker file name, default tickers.txt
   --output_file OUTPUT_FILE
-                        What is the output file name, default writes to stdout
+                        Output file name: Default writes to stdout
   --version             show program's version number and exit
-
 
 
 

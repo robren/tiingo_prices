@@ -7,24 +7,18 @@ import sys
 # pip install tiingo first
 from tiingo import TiingoClient
 
-tiingo_key = os.environ['TIINGO_API_KEY']
-version = '0.1.0' 
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--ticker_file', type=str,default='tickers.txt',\
-            help='What is the ticker file name, default tickers.txt')
+    parser = argparse.ArgumentParser(description = "Returns the most recent \
+                closing prices and last years dividends for stocks")
+    parser.add_argument('ticker_file', type=str,\
+            help='Ticker file name: One ticker per line',)
     parser.add_argument('--output_file', type=str,\
-            help='What is the output file name, default writes to stdout')
+            help='Output file name: Default writes to stdout')
     parser.add_argument('--version', action='version', version='0.1.0')
     args = parser.parse_args()
     out_file = args.output_file
-    version = args.version
-
-    if version:
-        print("tiingo_prices version is {}".format(version))
-
 
     if out_file:
         if os.path.isfile(out_file):
@@ -32,6 +26,13 @@ def main():
             if (overwrite == False) :
                 print('Aborting')
                 sys.exit()
+
+    if ('TIINGO_API_KEY' not in os.environ):
+        print('Please set the TIINGO_API_KEY environment variable.')
+        sys.exit()
+
+    tiingo_key = os.environ['TIINGO_API_KEY']
+    #print('TIINGO_API_KEY is set to {}'.format(tiingo_key))
 
     prices  = get_prices(args.ticker_file,tiingo_key)
     
@@ -85,13 +86,13 @@ def get_prices(ticker_file,tiingo_key):
                 ly_hist = client.get_dataframe(tickers=ticker, frequency='daily',
                                                startDate=start_date, endDate=end_date)
                 tot_divs = ly_hist['divCash'].sum()
+                print("Ticker = {} Price  = {} Divs = {:.2f}".format(ticker, price[0]['close'],tot_divs))
+                prices.append((ticker,price[0]['adjClose'], round(tot_divs,3)))
             except Exception as ex:
                 template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
                 print(message)
                 print('tingo did not find {}'.format(ticker))
-            print("Ticker = {} Price  = {} Divs = {}".format(ticker, price[0]['close'],tot_divs))
-            prices.append((ticker,price[0]['adjClose'], tot_divs))
     return prices
 
 
