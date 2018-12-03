@@ -16,7 +16,7 @@ def main():
             help='Ticker file name: One ticker per line',)
     parser.add_argument('--output_file', type=str,\
             help='Output file name: Default writes to stdout')
-    parser.add_argument('--version', action='version', version='0.1.0')
+    parser.add_argument('--version', action='version', version='0.2.0')
     args = parser.parse_args()
     out_file = args.output_file
 
