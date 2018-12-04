@@ -20,8 +20,7 @@ def main():
 
     if out_file:
         if os.path.isfile(out_file):
-            overwrite = yes_or_no('File {} exists, do you wish to overwrite it:'
-                                  .format(out_file))
+            overwrite = yes_or_no('File {} exists, do you wish to overwrite it:'.format(out_file))
             if (overwrite is False):
                 print('Aborting')
                 sys.exit()
@@ -70,10 +69,9 @@ def get_prices(ticker_file, tiingo_key):
 
     # Calculate beginning and end of last year
     cur_year = datetime.today().strftime('%Y')
-    last_year = str(int(cur_year) -1)
+    last_year = str(int(cur_year) - 1)
     start_date = last_year + '-' + '01' + '-' + '01'
     end_date = last_year + '-' + '12' + '-' + '31'
-
 
     client = TiingoClient(config)
 
@@ -83,11 +81,16 @@ def get_prices(ticker_file, tiingo_key):
 
             try:
                 price = client.get_ticker_price(ticker)
-                ly_hist = client.get_dataframe(tickers=ticker, frequency='daily',
-                                               startDate=start_date, endDate=end_date)
+                ly_hist = client.get_dataframe(tickers=ticker,
+                                               frequency='daily',
+                                               startDate=start_date,
+                                               endDate=end_date)
                 tot_divs = ly_hist['divCash'].sum()
-                print("Ticker = {} Price  = {} Divs = {:.2f}".format(ticker, price[0]['close'], tot_divs))
-                prices.append((ticker, price[0]['adjClose'], round(tot_divs,3)))
+                print("Ticker = {} Price  = {} Divs = {:.2f}"
+                      .format(ticker, price[0]['close'], tot_divs))
+                prices.append((ticker,
+                              price[0]['adjClose'],
+                              round(tot_divs, 3)))
             except Exception as ex:
                 template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
@@ -104,6 +107,7 @@ def yes_or_no(question):
         return False
     else:
         return False
+
 
 if __name__ == '__main__' :
     main()
