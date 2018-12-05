@@ -55,7 +55,9 @@ tiingo account.  For these close of day prices and divdends the API key
 provided with the free "starter" account will work. 
 
 $ tiingo_prices -h
-usage: tiingo_prices [-h] [--output_file OUTPUT_FILE] [--version] ticker_file
+usage: tiingo_prices [-h] [--output_file OUTPUT_FILE] [--nyse_pref]
+                     [--version]
+                     ticker_file
 
 Returns the most recent closing prices and last years dividends for stocks
 
@@ -66,9 +68,11 @@ optional arguments:
   -h, --help            show this help message and exit
   --output_file OUTPUT_FILE
                         Output file name: Default writes to stdout
+  --nyse_pref           Attempt to recongnize NYSE Preferred ticker symbols
+                        and convert to tiingo friendly format. Warning may
+                        produce incorect results for non NYSE stocks with PR
+                        in their ticker name
   --version             show program's version number and exit
-
-
 
 Credits
 ---------
