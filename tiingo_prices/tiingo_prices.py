@@ -1,4 +1,5 @@
 import argparse
+import csv
 from datetime import datetime
 import os
 import sys
@@ -9,11 +10,14 @@ from tiingo import TiingoClient
 
 def main():
     parser = argparse.ArgumentParser(description="Returns the most recent \
-                closing prices and last years dividends for stocks")
+            closing prices and last years dividends for stocks")
     parser.add_argument('ticker_file', type=str,
-                        help='Ticker file name: One ticker per line',)
+            help='Ticker file name: One ticker per line',)
     parser.add_argument('--output_file', type=str,
-                        help='Output file name: Default writes to stdout')
+            help='Output file name: Default writes to stdout')
+    parser.add_argument('--nyse_pref', action='store_true',
+            help='Attempt to recongnize NYSE Preferred ticker symbols and convert to tiingo friendly format. \
+            Warning may produce incorect results for non NYSE stocks with PR in their ticker name')
     parser.add_argument('--version', action='version', version='0.2.0')
     args = parser.parse_args()
     out_file = args.output_file
@@ -32,22 +36,25 @@ def main():
     tiingo_key = os.environ['TIINGO_API_KEY']
     # print('TIINGO_API_KEY is set to {}'.format(tiingo_key))
 
-    prices = get_prices(args.ticker_file, tiingo_key)
+    prices = get_prices(args.ticker_file, tiingo_key, args.nyse_pref)
 
+    hdr_str = 'Ticker'  + ',' + 'Price' + ',' + 'Last Yr Divs' + '\n'
     if out_file:
         with open(args.output_file, 'w') as fh:
+            fh.write(hdr_str)
             for ticker, price, div in prices:
                 fh.write(ticker + ',' + str(price) + ',' + str(div) + '\n')
     else:
+        sys.stdout.write(hdr_str)
         for ticker, price, div in prices:
             sys.stdout.write(ticker + ',' + str(price) + ',' + str(div) + '\n')
 
 
-def get_prices(ticker_file, tiingo_key):
+def get_prices(ticker_file, tiingo_key, nyse_pref):
 
     """Obtains close of day prices for each ticker..
     Uses the tiingo API to retrive the price for tickers which are
-     specified in the ticker_file.
+    specified in the ticker_file.
 
     https://media.readthedocs.org/pdf/tiingo-python/latest/tiingo-python.pdf
 
@@ -55,6 +62,8 @@ def get_prices(ticker_file, tiingo_key):
         ticker_file: A file with a ticker per line.
         tiingo_key: The tiingo API authentiaction key. End of day pricing data
         was free as of the time of writing Nov 2018.
+        nyse_pref: Attempt to recognixe tickers with PR in the ticker name and
+        convert to tiingo friendly format for the lookup.
     Returns:
         A list of tupless. Each tuple consisting of:
             - Ticker a string
@@ -75,22 +84,37 @@ def get_prices(ticker_file, tiingo_key):
 
     client = TiingoClient(config)
 
-    with open(ticker_file) as t_file:
+    with open(ticker_file, newline = '') as t_file:
+#        dialect = csv.Sniffer().sniff(csvfile.read(1024))
+#        csvfile.seek(0)
+#        reader = csv.reader(csvfile, dialect)
         for line in t_file:  # Each line contains a ticker
+            print(line )
             ticker = line.strip()
 
+            if nyse_pref is True:
+                if('PR') in ticker:
+                    tiingo_ticker = ticker.replace(' ','')
+                    tiingo_ticker = tiingo_ticker.replace('PR','-P-')
+                    print("Found a Prefered Stock {} and looked up {}".format(
+                        ticker,tiingo_ticker))
+                else:
+                    tiingo_ticker = ticker
+
+            else:
+                tiingo_ticker = ticker
             try:
-                price = client.get_ticker_price(ticker)
-                ly_hist = client.get_dataframe(tickers=ticker,
-                                               frequency='daily',
-                                               startDate=start_date,
-                                               endDate=end_date)
+                price = client.get_ticker_price(tiingo_ticker)
+                ly_hist = client.get_dataframe(tickers=tiingo_ticker,
+                        frequency='daily',
+                        startDate=start_date,
+                        endDate=end_date)
                 tot_divs = ly_hist['divCash'].sum()
                 print("Ticker = {} Price  = {} Divs = {:.2f}"
-                      .format(ticker, price[0]['close'], tot_divs))
+                        .format(ticker, price[0]['close'], tot_divs))
                 prices.append((ticker,
-                              price[0]['adjClose'],
-                              round(tot_divs, 3)))
+                    price[0]['adjClose'],
+                    round(tot_divs, 3)))
             except Exception as ex:
                 template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                 message = template.format(type(ex).__name__, ex.args)
