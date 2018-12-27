@@ -10,7 +10,7 @@ from tiingo import TiingoClient
 
 def main():
     parser = argparse.ArgumentParser(description="Returns the most recent \
-            closing prices and last years dividends for stocks")
+            closing prices and trailing twelve months  dividends for stocks")
     parser.add_argument('ticker_file', type=str,
             help='Ticker file name: One ticker per line',)
     parser.add_argument('--output_file', type=str,
@@ -18,7 +18,7 @@ def main():
     parser.add_argument('--nyse_pref', action='store_true',
             help='Attempt to recongnize NYSE Preferred ticker symbols and convert to tiingo friendly format. \
             Warning may produce incorect results for non NYSE stocks with PR in their ticker name')
-    parser.add_argument('--version', action='version', version='0.2.3')
+    parser.add_argument('--version', action='version', version='0.2.2')
     args = parser.parse_args()
     out_file = args.output_file
 
@@ -68,6 +68,7 @@ def get_prices(ticker_file, tiingo_key, nyse_pref):
         A list of tupless. Each tuple consisting of:
             - Ticker a string
             - Price a float
+            - Total Dividends a float rounded to 3 decimal places
 
     """
 
