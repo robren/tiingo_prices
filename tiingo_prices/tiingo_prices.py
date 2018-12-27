@@ -1,6 +1,6 @@
 import argparse
 import csv
-from datetime import datetime
+from datetime import date, timedelta
 import os
 import sys
 
@@ -18,7 +18,7 @@ def main():
     parser.add_argument('--nyse_pref', action='store_true',
             help='Attempt to recongnize NYSE Preferred ticker symbols and convert to tiingo friendly format. \
             Warning may produce incorect results for non NYSE stocks with PR in their ticker name')
-    parser.add_argument('--version', action='version', version='0.2.1')
+    parser.add_argument('--version', action='version', version='0.2.3')
     args = parser.parse_args()
     out_file = args.output_file
 
@@ -76,11 +76,9 @@ def get_prices(ticker_file, tiingo_key, nyse_pref):
     config['session'] = True
     config['api_key'] = tiingo_key
 
-    # Calculate beginning and end of last year
-    cur_year = datetime.today().strftime('%Y')
-    last_year = str(int(cur_year) - 1)
-    start_date = last_year + '-' + '01' + '-' + '01'
-    end_date = last_year + '-' + '12' + '-' + '31'
+    end_date = date.today()
+    delta = timedelta(days=365)
+    start_date  = end_date - delta
 
     client = TiingoClient(config)
 
