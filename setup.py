@@ -20,7 +20,7 @@ test_requirements = [
 
 setup(
     name='tiingo_prices',
-    version='0.2.2',
+    version='0.2.3',
     description="A CLI tool to get close of day prices from tiingo",
     long_description=readme + '\n\n' + history,
     author="Robert Rennison",
