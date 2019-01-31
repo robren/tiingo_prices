@@ -1,6 +1,6 @@
 import argparse
 import csv
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 import os
 import sys
 
@@ -10,17 +10,27 @@ from tiingo import TiingoClient
 
 def main():
     parser = argparse.ArgumentParser(description="Returns the most recent \
-            closing prices and trailing twelve months  dividends for stocks")
+            closing prices and trailing twelve months dividends for stocks")
     parser.add_argument('ticker_file', type=str,
             help='Ticker file name: One ticker per line',)
     parser.add_argument('--output_file', type=str,
             help='Output file name: Default writes to stdout')
+    parser.add_argument('--end_date', type=str, 
+            help='Date to get prices on: Default most recent closing date. \
+                The date should be entered as YYYY-MM-DD \
+                    trailing 12 months dividends are also relative to this date')
     parser.add_argument('--nyse_pref', action='store_true',
             help='Attempt to recongnize NYSE Preferred ticker symbols and convert to tiingo friendly format. \
             Warning may produce incorect results for non NYSE stocks with PR in their ticker name')
     parser.add_argument('--version', action='version', version='0.2.2')
     args = parser.parse_args()
     out_file = args.output_file
+    end_date = args.end_date
+
+    if end_date:
+        end_date = date.fromisoformat(end_date)
+    else:
+        end_date = date.today()
 
     if out_file:
         if os.path.isfile(out_file):
@@ -29,16 +39,19 @@ def main():
                 print('Aborting')
                 sys.exit()
 
-    if ('TIINGO_API_KEY' not in os.environ):
+    if ('TIINGO_API_KEY' not  in os.environ):
         print('Please set the TIINGO_API_KEY environment variable.')
         sys.exit()
 
     tiingo_key = os.environ['TIINGO_API_KEY']
     # print('TIINGO_API_KEY is set to {}'.format(tiingo_key))
 
-    prices = get_prices(args.ticker_file, tiingo_key, args.nyse_pref)
+    prices = get_prices(args.ticker_file, tiingo_key, args.nyse_pref, end_date)
 
-    hdr_str = 'Ticker'  + ',' + 'Price' + ',' + 'Last Yr Divs' + '\n'
+    end_date_str = datetime.strftime(end_date,'%Y-%m-%d')
+
+    hdr_str = 'Prices on or the last trading day before ' + end_date_str + '\n' + \
+        'Ticker'  + ',' + ' Price' + ',' + ' Prior 12 Months  Divs' + '\n'
     if out_file:
         with open(args.output_file, 'w') as fh:
             fh.write(hdr_str)
@@ -50,7 +63,7 @@ def main():
             sys.stdout.write(ticker + ',' + str(price) + ',' + str(div) + '\n')
 
 
-def get_prices(ticker_file, tiingo_key, nyse_pref):
+def get_prices(ticker_file, tiingo_key, nyse_pref, end_date):
 
     """Obtains close of day prices for each ticker..
     Uses the tiingo API to retrive the price for tickers which are
@@ -64,6 +77,7 @@ def get_prices(ticker_file, tiingo_key, nyse_pref):
         was free as of the time of writing Nov 2018.
         nyse_pref: Attempt to recognixe tickers with PR in the ticker name and
         convert to tiingo friendly format for the lookup.
+        end_date: Date to get prices from.
     Returns:
         A list of tupless. Each tuple consisting of:
             - Ticker a string
@@ -77,7 +91,6 @@ def get_prices(ticker_file, tiingo_key, nyse_pref):
     config['session'] = True
     config['api_key'] = tiingo_key
 
-    end_date = date.today()
     delta = timedelta(days=365)
     start_date  = end_date - delta
 
@@ -88,14 +101,14 @@ def get_prices(ticker_file, tiingo_key, nyse_pref):
 #        csvfile.seek(0)
 #        reader = csv.reader(csvfile, dialect)
         for line in t_file:  # Each line contains a ticker
-            print(line )
+            #print(line )
             ticker = line.strip()
 
             if nyse_pref is True:
                 if('PR') in ticker:
                     tiingo_ticker = ticker.replace(' ','')
                     tiingo_ticker = tiingo_ticker.replace('PR','-P-')
-                    print("Found a Prefered Stock {} and looked up {}".format(
+                    print("Found a Preferred Stock {} and looked up {}".format(
                         ticker,tiingo_ticker))
                 else:
                     tiingo_ticker = ticker
