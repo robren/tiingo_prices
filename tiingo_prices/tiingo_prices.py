@@ -42,7 +42,7 @@ def main():
 
     if ('TIINGO_API_KEY' not  in os.environ):
         print('Please set the TIINGO_API_KEY environment variable.')
-        sys.exit()
+        sys.exit(1)
 
     tiingo_key = os.environ['TIINGO_API_KEY']
     # print('TIINGO_API_KEY is set to {}'.format(tiingo_key))
@@ -52,7 +52,7 @@ def main():
     end_date_str = datetime.strftime(end_date,'%Y-%m-%d')
 
     hdr_str = 'Prices on or the last trading day before ' + end_date_str + '\n' + \
-        'Ticker'  + ',' + ' Price' + ',' + ' Prior 12 Months  Divs' + '\n'
+        'Ticker'  + ',' + 'Price' + ',' + 'Prior 12 Months Divs' + '\n'
     if out_file:
         with open(args.output_file, 'w') as fh:
             fh.write(hdr_str)
