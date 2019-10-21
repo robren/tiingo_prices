@@ -43,6 +43,6 @@ tiingo==0.8.0
 -e git+git@github.com:robren/tiingo_prices.git@1b5270664ec93c6ed9f78ffa985647997a942ea1#egg=tiingo_prices
 tornado==5.1.1
 traitlets==4.3.2
-urllib3==1.23
+urllib3==1.24.2
 wcwidth==0.1.7
 whichcraft==0.5.2
