@@ -22,7 +22,7 @@ def main():
     parser.add_argument('--nyse_pref', action='store_true',
             help='Attempt to recognize NYSE Preferred ticker symbols and convert to tiingo friendly format. \
             Warning may produce incorrect results for non NYSE stocks with PR in their ticker name')
-    parser.add_argument('--version', action='version', version='0.2.3')
+    parser.add_argument('--version', action='version', version='0.3.0')
     args = parser.parse_args()
     out_file = args.output_file
     end_date = args.end_date
