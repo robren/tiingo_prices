@@ -29,30 +29,23 @@ Features
 
 * Uses the tiingo python API to obtain most recent closing prices for a number
   of tickers. The tickers being specified in a text file, one ticker per line.
-* Last years dividends are also obtained anc calculated for each ticker.
-* Output is either written to stdout or to a specified file. Output is written in csv
-  format with Ticker,Price,Dividend
+* Last years dividends are also obtained and calculated for each ticker.
+* Output is either written to stdout or to a specified file. Output is written in CSV
+  format with Ticker,Price,Dividend on each line of the file.
 
 Installation
 ------------
 
-This is not commited to pypi so the best way of installing is to:
-
-- Git clone the repo
-- Optional:  Create a virtual environment if desired.
-- Install locally with 
-  
 .. code:: bash
 
-   pip install --user -e .
-
+    pip install tiingo_prices
 
 Usage
------
+------
 
 Set the environment variable TIINGO_API_KEY to the API key associated with your
 tiingo account.  For these close of day prices and divdends the API key
-provided with the free "starter" account will work. 
+provided with the free "starter" account will work.
 
 $ tiingo_prices -h
 usage: tiingo_prices [-h] [--output_file OUTPUT_FILE] [--nyse_pref]
@@ -65,14 +58,14 @@ positional arguments:
   ticker_file           Ticker file name: One ticker per line
 
 optional arguments:
-  -h, --help            show this help message and exit
+  -h, --help            Show this help message and exit.
   --output_file OUTPUT_FILE
-                        Output file name: Default writes to stdout
-  --nyse_pref           Attempt to recongnize NYSE Preferred ticker symbols
+                        Output file name: Default writes to stdout.
+  --nyse_pref           Attempt to recognize NYSE Preferred ticker symbols
                         and convert to tiingo friendly format. Warning may
-                        produce incorect results for non NYSE stocks with PR
-                        in their ticker name
-  --version             show program's version number and exit
+                        produce incorrect results for non NYSE stocks with PR
+                        in their ticker name.
+  --version             Show program's version number and exit.
 
 Credits
 ---------
@@ -81,4 +74,3 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-
