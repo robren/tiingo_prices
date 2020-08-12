@@ -20,14 +20,14 @@ setup(
     version='0.3.0',
     description="A CLI tool to get close of day prices from tiingo",
     long_description=readme,
+    long_description_content_type='text/x-rst',
     author="Robert Rennison",
     author_email='rob@robren.net',
     url='https://github.com/robren/tiingo_prices',
     packages=[
         'tiingo_prices',
     ],
-    package_dir={'tiingo_prices':
-                 'tiingo_prices'},
+    package_dir={'tiingo_prices':'tiingo_prices'},
     entry_points={
         'console_scripts': [
             'tiingo_prices=tiingo_prices.tiingo_prices:main'
@@ -44,7 +44,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],

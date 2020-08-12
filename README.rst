@@ -44,28 +44,34 @@ Usage
 ------
 
 Set the environment variable TIINGO_API_KEY to the API key associated with your
-tiingo account.  For these close of day prices and divdends the API key
+tiingo account.
+
+.. code:: bash
+
+	  export TIINGO_API_KEY='YourTiingoAPIKey'
+
+For these close of day prices and divdends the API key
 provided with the free "starter" account will work.
 
-$ tiingo_prices -h
-usage: tiingo_prices [-h] [--output_file OUTPUT_FILE] [--nyse_pref]
-                     [--version]
-                     ticker_file
+.. code:: bash
 
-Returns the most recent closing prices and last years dividends for stocks
+	  $ tiingo_prices -h
+	  usage: tiingo_prices [-h] [--output_file OUTPUT_FILE] [--nyse_pref][--version] ticker_file
 
-positional arguments:
-  ticker_file           Ticker file name: One ticker per line
+	  Returns the most recent closing prices and last years dividends for stocks
 
-optional arguments:
-  -h, --help            Show this help message and exit.
-  --output_file OUTPUT_FILE
-                        Output file name: Default writes to stdout.
-  --nyse_pref           Attempt to recognize NYSE Preferred ticker symbols
-                        and convert to tiingo friendly format. Warning may
-                        produce incorrect results for non NYSE stocks with PR
-                        in their ticker name.
-  --version             Show program's version number and exit.
+	  positional arguments:
+	  ticker_file           Ticker file name: One ticker per line
+
+	  optional arguments:
+	  -h, --help            Show this help message and exit.
+	  --output_file OUTPUT_FILE
+	                        Output file name: Default writes to stdout.
+	  --nyse_pref           Attempt to recognize NYSE Preferred ticker symbols
+	                        and convert to tiingo friendly format. Warning may
+                                produce incorrect results for non NYSE stocks with PR
+                                in their ticker name.
+	  --version             Show program's version number and exit.
 
 Credits
 ---------
