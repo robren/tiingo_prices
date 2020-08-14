@@ -18,8 +18,8 @@ tiingo_prices
      :alt: Updates
 
 
-A CLI tool to get close of day prices from tiingo
-
+A CLI tool to get a close of day price and annual dividends for a set of
+tickers. Uses the tiingo python API.
 
 * Free software: MIT license
 

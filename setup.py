@@ -17,8 +17,8 @@ test_requirements = [
 
 setup(
     name='tiingo_prices',
-    version='0.3.0',
-    description="A CLI tool to get close of day prices from tiingo",
+    version='0.3.1',
+    description="A CLI tool to get close of day price and annual dividends",
     long_description=readme,
     long_description_content_type='text/x-rst',
     author="Robert Rennison",
@@ -34,7 +34,7 @@ setup(
         ]
     },
     include_package_data=True,
-    install_requires=['tiingo'],
+    install_requires=requirements,
     license="MIT license",
     zip_safe=False,
     keywords='tiingo_prices tiingo finance',
